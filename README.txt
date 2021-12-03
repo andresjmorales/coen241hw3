@@ -1,3 +1,5 @@
+TASK 1 QUESTIONS
+
 nodes
 ******
 available nodes are:
@@ -42,23 +44,44 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-Function call graph:
-start switch
-_handle_PacketIn() -> act_like_hub() -> resend_packet() -> send(msg)
 
+===================
+
+TASK 2 QUESTIONS
+1.
+Function call graph:
+start switch : _handle_PacketIn() -> act_like_hub() -> resend_packet() -> send(msg)
+
+2.
 h1 ping -c100 h2
 avg/min/max/mdev: 1.698/3.323/13.564/1.548
-
 h1 ping -c100 h8
 min/avg/max/mdev: 10.613/16.014/30.790/3.511
+The ping times are much higher for h1 to h8 than for h1 to h2, because h1 only has one switch in between itself and h2, where there are several hops between h1 and h8, having to go through switches s3, s2, s1, s5, s7.
 
-h1 only has one switch in between itself and h2, where there are several hops between h1 and h8, having to go through switches s3, s2, 1, 5, 7
-
+3.
 *** Iperf: testing TCP bandwidth between h1 and h2
 *** Results: ['9.16 Mbits/sec', '10.8 Mbits/sec']
-
 *** Iperf: testing TCP bandwidth between h1 and h8
 *** Results: ['2.94 Mbits/sec', '3.48 Mbits/sec']
 
 
+===================
 
+TASK 3 QUESTIONS
+1.
+The act_like_switch function is able to map or “learn” what MAC addresses are located where so that once a MAC address is discovered to be a desired address that a sender sends to, the controller is able to map that MAC address to a port for simplicity. This also improves the performance of the controller when sending packets to already known addresses, as it just directs the packet to that known port. If the destination is not already known, the function simply floods the packet to all destinations.
+
+2.
+h1 ping -c100 h2
+avg/min/max/mdev: 1.198/2.636/3.479/0.355 ms
+h1 ping -c100 h8
+avg/min/max/mdev: 4.073/6.820/9.327/1.211 ms
+Again h1 to h2 is quicker, but this time only by 3 seconds instead of 9 seconds like before, because of the port mapping discussed earlier. h8 still takes longer simply because it is located further from h1.
+
+3.
+*** Iperf: testing TCP bandwidth between h1 and h2
+*** Results: ['77.0 Mbits/sec', '79.9 Mbits/sec']
+*** Iperf: testing TCP bandwidth between h1 and h8
+*** Results: ['3.00 Mbits/sec', '3.50 Mbits/sec']
+The bandwidth for h1 to h8 is about the same because of the distance, just slightly faster. h1 to h2 is much higher bandwidth, probably because once the port is mapped, the controller confines all packets the two send to the connected switch rather than searching other switches.
