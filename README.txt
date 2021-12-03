@@ -64,13 +64,17 @@ The ping times are much higher for h1 to h8 than for h1 to h2, because h1 only h
 *** Results: ['9.16 Mbits/sec', '10.8 Mbits/sec']
 *** Iperf: testing TCP bandwidth between h1 and h8
 *** Results: ['2.94 Mbits/sec', '3.48 Mbits/sec']
+The throughput is higher between h1 and h2 for the same reason ping times were lower, which is that there are less hops and therefore more data can be transmitted in a shorter time.
+
+4.
+Looking at the print statements from the pox output, all of the switches view traffic, specifically when all are flooded with packets.
 
 
 ===================
 
 TASK 3 QUESTIONS
 1.
-The act_like_switch function is able to map or “learn” what MAC addresses are located where so that once a MAC address is discovered to be a desired address that a sender sends to, the controller is able to map that MAC address to a port for simplicity. This also improves the performance of the controller when sending packets to already known addresses, as it just directs the packet to that known port. If the destination is not already known, the function simply floods the packet to all destinations.
+The act_like_switch function is able to map or “learn” what MAC addresses are located where so that once a MAC address is discovered to be a desired address that a sender sends to, the controller is able to map that MAC address to a port for simplicity. This also improves the performance of the controller when sending packets to already known addresses, as it just directs the packet to that known port. If the destination is not already known, the function simply floods the packet to all destinations. Flooding happens less often which is another reason for the improved ping times and throughputs.
 
 2.
 h1 ping -c100 h2
